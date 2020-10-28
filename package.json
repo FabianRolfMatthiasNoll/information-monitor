@@ -1,0 +1,18 @@
+{
+  "name": "information-monitor",
+  "version": "1.0.0",
+  "description": "automated information monitor",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Fabian Noll",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^10.1.5"
+  },
+  "build": {
+    "extraFiles": ["image.jpg"]
+    
+  }
+}
