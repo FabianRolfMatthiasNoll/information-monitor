@@ -14,7 +14,6 @@ async function createWindow(){
       webSecurity: false
     }
   });
-  
   let content = browserWindow.webContents;
 
   displayContent(content);
@@ -23,23 +22,34 @@ async function createWindow(){
 
 async function displayContent(content){
 
+  const length = fs.readdirSync('./slideshow').length;
+
+  for (i = 0; i < length; i++){
+
+  const html = 'image'+i+'.html';
+  content.loadURL(path.join(__dirname, html));
+
+  await sleep(10000);
+
+  }
+
   content.loadURL('https://calendar.google.com/calendar/u/1/r?tab=mc&pli=1', {
     userAgent: 'Chrome'
     });
 
-  await sleep(30000);  
+  await sleep(10000);  
 
   content.loadURL('https://www.elektronik-kompendium.de/news/', {
     userAgent: 'Chrome'
     }); 
 
-  await sleep(30000);  
+  await sleep(10000);  
 
   content.loadURL('https://www.electronicspecifier.com/', {
     userAgent: 'Chrome'
     }); 
   
-  await sleep(30000);
+  await sleep(10000);
   
   displayContent(content);
 }
