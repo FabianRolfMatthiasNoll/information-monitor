@@ -8,11 +8,13 @@
   },
   "author": "Fabian Noll",
   "license": "ISC",
-  "dependencies": {
-    "electron": "^10.1.5"
-  },
+  "dependencies": {},
   "build": {
-    "extraFiles": ["image.jpg"]
-    
+    "extraFiles": [
+      "image.jpg"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^10.1.5"
   }
 }
