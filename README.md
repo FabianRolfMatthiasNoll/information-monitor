@@ -8,6 +8,6 @@ It will offer an easier solution to display images and websites and let them swi
   
 - [x] open a pre configured website
 - [x] switch automatically after a pre defined time
-- [ ] display images from a local folder
-- [ ] automatically adding all pictures of a folder
+- [x] display images from a local folder
+- [x] automatically adding all pictures of a folder
 - [ ] small local temperature overview on top right corner
