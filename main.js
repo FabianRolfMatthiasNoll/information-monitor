@@ -14,7 +14,9 @@ async function createWindow(){
     webPreferences: {
       webSecurity: false,
       nodeIntegration: true
-    }
+    }, 
+    fullscreen: true,
+    autoHideMenuBar: true
   });
   let content = browserWindow.webContents;
 
