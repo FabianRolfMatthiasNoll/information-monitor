@@ -23,20 +23,29 @@ async function createWindow(){
 }
 
 async function displayContent(content){
-
-  const length = fs.readdirSync('./slideshow').length;
-
+  
   let config = fs.readFileSync('./config.json');
-
   config = JSON.parse(config);
+
+  let fileNames = [];
+
+  const length = fs.readdirSync(config["imageFolder"]).length;
+
+  fs.readdir(config["imageFolder"], (err, dir) => {
+    dir.forEach(file => {
+      fileNames.push(file);
+    })
+  })
+
+  fileNames.sort();
 
   content.loadURL(path.join(__dirname,"/basic.html"));
 
-  await sleep(config["sleepTimeImage"]);
+  await sleep(1000);
 
-  for (i = 1; i < length; i++){
+  for (i = 0; i < length; i++){
     
-    content.send('imageChange', i, config["imageFolder"]);
+    content.send('imageChange', fileNames[i], config["imageFolder"]);
     await sleep(config["sleepTimeImage"]);
 
   }

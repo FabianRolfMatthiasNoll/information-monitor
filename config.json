@@ -5,7 +5,7 @@
         "https://www.electronicspecifier.com/"
     ],
     "imageFolder": "./slideshow",
-    "sleepTimeMain": 60000,
-    "sleepTimeSecondary": 10000,
-    "sleepTimeImage": 6000
+    "sleepTimeMain": 1000,
+    "sleepTimeSecondary": 1000,
+    "sleepTimeImage": 1000
 }
