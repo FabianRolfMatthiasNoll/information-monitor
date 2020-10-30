@@ -4,34 +4,19 @@ const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
+const ipc = require("electron").ipcRenderer;
 
-const {app, BrowserWindow} = electron;
+const {app, BrowserWindow, ipcRenderer} = electron;
 
 async function createWindow(){
 
   let browserWindow = new BrowserWindow({
     webPreferences: {
-      webSecurity: false
+      webSecurity: false,
+      nodeIntegration: true
     }
   });
   let content = browserWindow.webContents;
-
-  const length = fs.readdirSync('./slideshow').length;
-
-  for (i = 0; i < length; i++){
-    
-    /*
-    fs.access('image'+i+'.html', fs.constants.R_OK, (err) => {
-      if(err);
-      else {
-      }
-    });
-    */
-
-    var htmlContent = '<html><style>.aligncenter {text-align: center;}</style><body style="height:100%; background-color: white"><p class="aligncenter"><img src="./slideshow/image'+i+'.JPG" height="100%"></p></body></html>';
-    fs.writeFile('./image'+i+'.html', htmlContent, (error) => {/*handle error*/});
-  
-  }
 
   displayContent(content);
 
@@ -41,33 +26,37 @@ async function displayContent(content){
 
   const length = fs.readdirSync('./slideshow').length;
 
-  for (i = 0; i < length; i++){
+  let config = fs.readFileSync('./config.json');
 
-  const html = 'image'+i+'.html';
-  content.loadURL(path.join(__dirname, html));
+  config = JSON.parse(config);
 
-  await sleep(6000);
+  content.loadURL(path.join(__dirname,"/basic.html"));
+
+  await sleep(config["sleepTimeImage"]);
+
+  for (i = 1; i < length; i++){
+    
+    content.send('imageChange', i, config["imageFolder"]);
+    await sleep(config["sleepTimeImage"]);
 
   }
 
-  content.loadURL('https://calendar.google.com/calendar/u/1/r?tab=mc&pli=1', {
+  content.loadURL(config["urls"][0], {
     userAgent: 'Chrome'
     });
 
-  await sleep(60000);  
+  await sleep(config["sleepTimeMain"]);  
 
-  content.loadURL('https://www.elektronik-kompendium.de/news/', {
-    userAgent: 'Chrome'
-    }); 
+  for (i = 1; i < config["urls"].length; i++){
 
-  await sleep(5000);  
+    content.loadURL(config["urls"][i], {
+      userAgent: 'Chrome'
+      }); 
 
-  content.loadURL('https://www.electronicspecifier.com/', {
-    userAgent: 'Chrome'
-    }); 
-  
-  await sleep(5000);
-  
+    await sleep(config["sleepTimeSecondary"]);  
+
+  }
+
   displayContent(content);
 }
 

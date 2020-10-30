@@ -1,0 +1,11 @@
+{
+    "urls": [
+        "https://calendar.google.com/calendar/u/1/r?tab=mc&pli=1",
+        "https://www.elektronik-kompendium.de/news/",
+        "https://www.electronicspecifier.com/"
+    ],
+    "imageFolder": "./slideshow",
+    "sleepTimeMain": 60000,
+    "sleepTimeSecondary": 10000,
+    "sleepTimeImage": 6000
+}
