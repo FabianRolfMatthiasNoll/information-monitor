@@ -4,17 +4,27 @@
   "description": "automated information monitor",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "author": "Fabian Noll",
   "license": "ISC",
   "dependencies": {},
   "build": {
     "extraFiles": [
-      "image.jpg"
-    ]
+      "html/basicImage.jpg",
+      "html/basic.html",
+      "preload.js",
+      "config.json",
+      "slideshow/"
+    ],
+  "files": [
+    "**/*"
+  ]
   },
   "devDependencies": {
-    "electron": "^10.1.5"
+    "electron": "^10.1.5",
+    "electron-builder": "^22.9.1"
   }
 }

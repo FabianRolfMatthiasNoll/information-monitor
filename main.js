@@ -22,6 +22,7 @@ async function createWindow(){
 
   displayContent(content);
 
+
 }
 
 async function displayContent(content){
@@ -31,9 +32,9 @@ async function displayContent(content){
 
   let fileNames = [];
 
-  const length = fs.readdirSync(config["imageFolder"]).length;
+  const length = fs.readdirSync('./slideshow').length;
 
-  fs.readdir(config["imageFolder"], (err, dir) => {
+  fs.readdir('./slideshow', (err, dir) => {
     dir.forEach(file => {
       fileNames.push(file);
     })
@@ -41,15 +42,14 @@ async function displayContent(content){
 
   fileNames.sort();
 
-  content.loadURL(path.join(__dirname,"/basic.html"));
+  content.loadURL('file:///html/basic.html');
 
   await sleep(1000);
 
   for (i = 0; i < length; i++){
     
-    content.send('imageChange', fileNames[i], config["imageFolder"]);
+    content.send('imageChange', fileNames[i]);
     await sleep(config["sleepTimeImage"]);
-
   }
 
   content.loadURL(config["urls"][0], {

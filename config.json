@@ -4,8 +4,7 @@
         "https://www.elektronik-kompendium.de/news/",
         "https://www.electronicspecifier.com/"
     ],
-    "imageFolder": "./slideshow",
-    "sleepTimeMain": 1000,
-    "sleepTimeSecondary": 1000,
-    "sleepTimeImage": 1000
+    "sleepTimeMain": 60000,
+    "sleepTimeSecondary": 10000,
+    "sleepTimeImage": 6000
 }
