@@ -6,8 +6,8 @@ This software replaces complex information monitor setups built with multiple sc
 
 - [x] Open pre-configured websites
 - [x] Switch automatically after a pre-defined time
-- [x] Display images from a local folder
-- [x] Automatically add all pictures from a folder
+- [x] Display images and videos from a local folder
+- [x] Automatically add all media from a folder
 
 ## Prerequisites
 
@@ -46,8 +46,8 @@ npm run dist
 1. **Default Image**: Place a default JPG image named `basicImage.jpg` in the `html` folder.
 2. **Slideshow**: 
    - Ensure a folder named `slideshow` exists in the main directory.
-   - Add your images to the `slideshow` folder (JPG, PNG, etc.).
-   - The display order is defined by filenames (e.g., `000.jpg`, `001.jpg`, `002.png`).
+   - Add your images and videos to the `slideshow` folder (JPG, PNG, MP4, WEBM, MKV).
+   - The display order is defined by filenames (e.g., `000.jpg`, `001.jpg`, `002.mp4`).
 3. **Configuration**:
    - Edit `config.json` to define websites and display duration.
    - You can add an infinite number of websites.

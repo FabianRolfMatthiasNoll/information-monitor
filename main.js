@@ -4,9 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const { promisify } = require('util');
 const readFile = promisify(fs.readFile);
-const ipc = require("electron").ipcRenderer;
 
-const {app, BrowserWindow, ipcRenderer} = electron;
+const {app, BrowserWindow, ipcMain} = electron;
 
 async function createWindow(){
 
@@ -30,26 +29,26 @@ async function displayContent(content){
   let config = fs.readFileSync('./config.json');
   config = JSON.parse(config);
 
-  let fileNames = [];
-
-  const length = fs.readdirSync('./slideshow').length;
-
-  fs.readdir('./slideshow', (err, dir) => {
-    dir.forEach(file => {
-      fileNames.push(file);
-    })
-  })
-
+  let fileNames = fs.readdirSync('./slideshow');
   fileNames.sort();
+  const length = fileNames.length;
 
-  content.loadURL('file:///html/basic.html');
+  content.loadFile('html/basic.html');
 
   await sleep(1000);
 
   for (i = 0; i < length; i++){
     
     content.send('imageChange', fileNames[i]);
-    await sleep(config["sleepTimeImage"]);
+
+    const ext = path.extname(fileNames[i]).toLowerCase();
+    if (ext === '.mp4' || ext === '.webm' || ext === '.mkv') {
+      await new Promise(resolve => {
+        ipcMain.once('videoEnded', () => resolve());
+      });
+    } else {
+      await sleep(config["sleepTimeImage"]);
+    }
   }
 
   content.loadURL(config["urls"][0], {
