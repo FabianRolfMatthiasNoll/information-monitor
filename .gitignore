@@ -1,6 +1,5 @@
 .vs/
 node_modules/
-slideshow/
 dist/
 html/basicImage.jpg
 yarn.lock
