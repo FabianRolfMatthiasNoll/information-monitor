@@ -1,25 +1,59 @@
 # Information Monitor
-  
-# Purpose
-This software will replace a information monitor build up by many scripts.  
-It will offer an easier solution to display images and websites and let them switch automatically.  
 
-# Features
-  
-- [x] open a pre configured website
-- [x] switch automatically after a pre defined time
-- [x] display images from a local folder
-- [x] automatically adding all pictures of a folder
-- [ ] small local temperature overview on top right corner
-- [ ] create standalone installable version
+This software replaces complex information monitor setups built with multiple scripts. It offers an easy solution to display images and websites, switching between them automatically.
 
-# How to use  
-  
-1).Put a default jpg-Image named "basicImage" in the html folder  
-2).Create a folder named "slideshow" in the main directory  
-3).You can now throw pictures into the slideshow folder. (JPG,PNG etc doesnt matter)  
-4).The order of the Images is defined by their names (000 => 001 => 002...)   
-5).infinite Websites can be defined in the config.json  
-6).Also the time how long a picture etc. is show is adjustable in the config.json  
-7).All settings will be automatically applied after one cycle  
-8).Have fun :)  
+## Features
+
+- [x] Open pre-configured websites
+- [x] Switch automatically after a pre-defined time
+- [x] Display images from a local folder
+- [x] Automatically add all pictures from a folder
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (and npm)
+
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## How to Start
+
+To run the application in development mode:
+
+```bash
+npm start
+```
+
+## How to Build
+
+To build the application for distribution:
+
+```bash
+# Create a directory build
+npm run pack
+
+# Create a distributable installer
+npm run dist
+```
+
+## Configuration & Usage
+
+1. **Default Image**: Place a default JPG image named `basicImage.jpg` in the `html` folder.
+2. **Slideshow**: 
+   - Ensure a folder named `slideshow` exists in the main directory.
+   - Add your images to the `slideshow` folder (JPG, PNG, etc.).
+   - The display order is defined by filenames (e.g., `000.jpg`, `001.jpg`, `002.png`).
+3. **Configuration**:
+   - Edit `config.json` to define websites and display duration.
+   - You can add an infinite number of websites.
+   - Display duration for pictures and websites is adjustable.
+4. **Runtime**:
+   - Settings are automatically re-applied after one cycle.
+   - Press **F11** to toggle full screen.
+
+Have fun!
