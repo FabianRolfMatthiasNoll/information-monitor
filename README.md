@@ -29,6 +29,20 @@ To run the application in development mode:
 npm start
 ```
 
+## Auto-Start on Raspberry Pi
+
+### Option 1: systemd Service (Recommended)
+
+```bash
+bash install-autostart.sh
+sudo systemctl start information-monitor
+sudo journalctl -u information-monitor -f  # View logs
+```
+
+### Option 2: Desktop Environment Auto-start
+
+The application will auto-start on login if you've run the installation script above.
+
 ## How to Build
 
 To build the application for distribution:

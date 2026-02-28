@@ -1,22 +1,54 @@
-const { ipcRenderer } = require('electron')
-let image = document.getElementById("image");
-let video = document.getElementById("video");
+const { ipcRenderer } = require('electron');
 
-ipcRenderer.on('imageChange', (event, fileName) => {
-    let url = '../slideshow/' + fileName;
+let image = null;
+let video = null;
+
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupHandlers);
+} else {
+  setupHandlers();
+}
+
+function setupHandlers() {
+  image = document.getElementById('image');
+  video = document.getElementById('video');
+  
+  if (!image || !video) {
+    console.error('image or video element not found');
+    return;
+  }
+
+  ipcRenderer.on('imageChange', (event, data) => {
+    const { fileName, isVideo } = data;
+    const url = '../slideshow/' + fileName;
     
-    if (fileName.toLowerCase().endsWith('.mp4') || fileName.toLowerCase().endsWith('.webm') || fileName.toLowerCase().endsWith('.mkv')) {
-        image.style.display = "none";
-        video.style.display = "inline";
+    try {
+      if (isVideo) {
+        image.style.display = 'none';
+        video.style.display = 'inline';
         video.src = url;
-        video.play();
-        video.onended = () => {
+        
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.error('Video play error:', err);
             ipcRenderer.send('videoEnded');
+          });
+        }
+        
+        video.onended = () => {
+          ipcRenderer.send('videoEnded');
         };
-    } else {
+      } else {
         video.pause();
-        video.style.display = "none";
-        image.style.display = "inline";
+        video.currentTime = 0;
+        video.style.display = 'none';
+        image.style.display = 'inline';
         image.src = url;
+      }
+    } catch (error) {
+      console.error('Error handling imageChange:', error);
     }
-})
+  });
+}

@@ -1,72 +1,68 @@
 const electron = require('electron');
-const url = require('url');
 const path = require('path');
 const fs = require('fs');
-const { promisify } = require('util');
-const readFile = promisify(fs.readFile);
 
 const {app, BrowserWindow, ipcMain} = electron;
 
-async function createWindow(){
+let mainWindow;
 
-  let browserWindow = new BrowserWindow({
+async function createWindow(){
+  mainWindow = new BrowserWindow({
     webPreferences: {
-      webSecurity: false,
-      nodeIntegration: true
+      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: false,
+      contextIsolation: true,
+      enableRemoteModule: false
     }, 
     fullscreen: true,
-    autoHideMenuBar: true
+    autoHideMenuBar: true,
+    show: true
   });
-  let content = browserWindow.webContents;
 
-  displayContent(content);
-
-
+  mainWindow.loadFile('html/basic.html');
+  
+  displayContent(mainWindow.webContents);
 }
 
-async function displayContent(content){
-  
-  let config = fs.readFileSync('./config.json');
-  config = JSON.parse(config);
+async function displayContent(content) {
+  try {
+    let config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+    let fileNames = fs.readdirSync('./slideshow').filter(f => !f.startsWith('.'));
+    fileNames.sort();
 
-  let fileNames = fs.readdirSync('./slideshow');
-  fileNames.sort();
-  const length = fileNames.length;
-
-  content.loadFile('html/basic.html');
-
-  await sleep(1000);
-
-  for (i = 0; i < length; i++){
-    
-    content.send('imageChange', fileNames[i]);
-
-    const ext = path.extname(fileNames[i]).toLowerCase();
-    if (ext === '.mp4' || ext === '.webm' || ext === '.mkv') {
-      await new Promise(resolve => {
-        ipcMain.once('videoEnded', () => resolve());
-      });
-    } else {
-      await sleep(config["sleepTimeImage"]);
+    // Slideshow cycle
+    for (const fileName of fileNames) {
+      const ext = path.extname(fileName).toLowerCase();
+      const isVideo = ['.mp4', '.webm', '.mkv'].includes(ext);
+      
+      content.send('imageChange', { fileName, isVideo });
+      
+      if (isVideo) {
+        // Wait for video to finish
+        await new Promise(resolve => {
+          const timeout = setTimeout(() => resolve(), 300000); // 5 min safety timeout
+          ipcMain.once('videoEnded', () => {
+            clearTimeout(timeout);
+            resolve();
+          });
+        });
+      } else {
+        await sleep(config.sleepTimeImage);
+      }
     }
+
+    // URL cycle
+    for (const [idx, url] of config.urls.entries()) {
+      content.loadURL(url, { userAgent: 'Chrome' });
+      const duration = idx === 0 ? config.sleepTimeMain : config.sleepTimeSecondary;
+      await sleep(duration);
+    }
+  } catch (error) {
+    console.error('Display cycle error:', error);
+    await sleep(5000);
   }
 
-  content.loadURL(config["urls"][0], {
-    userAgent: 'Chrome'
-    });
-
-  await sleep(config["sleepTimeMain"]);  
-
-  for (i = 1; i < config["urls"].length; i++){
-
-    content.loadURL(config["urls"][i], {
-      userAgent: 'Chrome'
-      }); 
-
-    await sleep(config["sleepTimeSecondary"]);  
-
-  }
-
+  // Loop back
   displayContent(content);
 }
 
