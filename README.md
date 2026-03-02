@@ -62,6 +62,13 @@ npm run dist
    - Ensure a folder named `slideshow` exists in the main directory.
    - Add your images and videos to the `slideshow` folder (JPG, PNG, MP4, WEBM, MKV).
    - The display order is defined by filenames (e.g., `000.jpg`, `001.jpg`, `002.mp4`).
+   - **Changes apply automatically**: the app watches the folder and `config.json`.  However, configuration changes do **not** interrupt the middle of a URL cycle – the new settings take effect once the current slideshow + URL list finishes, so you won’t see the calendar jump back to the start unexpectedly.  Videos are still played to the end before any restart.
+3. **Configuration** (`config.json`): modify the `urls` array and timing values. The timeout names have been clarified:
+   - `calendarDisplayTime` – duration for the first URL (typically a calendar)
+   - `secondaryUrlDisplayTime` – duration for every subsequent URL
+   - `imageDisplayTime` – how long non‑video images remain on screen
+
+   Updates take effect without restarting the app.
 3. **Configuration**:
    - Edit `config.json` to define websites and display duration.
    - You can add an infinite number of websites.
